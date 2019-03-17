@@ -1,0 +1,45 @@
+function imgo = sf(imgi,method,arg)
+    %空域滤波器
+    %imgi:输入图像
+    %method:使用的滤波方法
+    %arg:参数
+    imgo=imgi;
+    switch method
+        %高斯滤波器
+        case 'gauss'%arg为阶数、sigma
+            gkm=GaussKernel(arg(1),arg(2));
+            dis=(arg(1)-1)/2;
+            for i=1+dis:size(imgo,1)-dis
+                for j=1+dis:size(imgo,2)-dis
+                    imgo(i,j)=sum(imgi(i-dis:i+dis,j-dis:j+dis).*gkm,'all');
+                end
+            end
+        %中值滤波
+        case 'mid'%arg为阶数
+            dis=(arg-1)/2;
+            for i=1+dis:size(imgo,1)-dis
+                for j=1+dis:size(imgo,2)-dis
+                    imgo(i,j)=median(imgi(i-dis:i+dis,j-dis:j+dis),'all');
+                end
+            end
+        %sobel边缘检测    
+        case 'sobel'
+            sobelM=[-1,-2,-1;0,0,0;1,2,1];
+            for i=2:size(imgo,1)-1
+                for j=2:size(imgo,2)-1
+                    imgo(i,j)=abs(sum(imgi(i-1:i+1,j-1:j+1).*sobelM,'all'))+abs(sum(imgi(i-1:i+1,j-1:j+1).*sobelM','all'));
+                end
+            end
+        %laplace边缘检测
+        case 'laplace'
+            laplaceM=[-1,-1,-1;-1,8,-1;-1,-1,-1];
+            for i=2:size(imgo,1)-1
+                for j=2:size(imgo,2)-1
+                    imgo(i,j)=abs(sum(imgi(i-1:i+1,j-1:j+1).*laplaceM,'all'));
+                end
+            end
+        case 'canny'
+            imgo=edge(imgi,'canny');
+    end
+end
+

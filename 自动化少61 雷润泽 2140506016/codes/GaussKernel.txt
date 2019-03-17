@@ -1,0 +1,13 @@
+function K = GaussKernel(order,sigma)
+    %生成高斯滤波器核
+    %order:高斯滤波器的阶次
+    %sigma:高斯滤波器的标准差
+    %K:高斯滤波器核
+    K=zeros(order,order);
+    for i=1:order
+        for j=1:order
+            K(i,j)=exp(-(power((order+1)/2-i,2)+power((order+1)/2-j,2))/(2*sigma*sigma));
+        end
+    end
+    K=K./sum(K,'all');%归一化
+end

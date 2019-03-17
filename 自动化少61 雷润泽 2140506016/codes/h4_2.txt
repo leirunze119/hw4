@@ -1,0 +1,39 @@
+%第四次作业第3题
+
+imgistr='test4 copy.bmp';
+imgoum='test4 copy_unsharp_masking.bmp';
+imgos='test4 copy_sobel.bmp';
+imgol='test4 copy_laplace.bmp';
+imgoc='test4 copy_canny.bmp';
+
+imgi=im2double(imread(imgistr));
+
+%unsharp masking
+order=5;%高斯滤波器模板大小
+sigma=3;
+k=4.5;%非锐化掩蔽系数
+imge=expand(imgi,order);
+imgf=sf(imge,'gauss',[order,sigma]);
+imgc=imgf(1+(order-1)/2:size(imgf,1)-(order-1)/2,1+(order-1)/2:size(imgf,2)-(order-1)/2);
+dif=imgi-imgc;
+imgo=imgi+k*dif;
+imwrite(imgo,imgoum);
+
+%sobel
+imge=expand(imgi,3);
+imgf=sf(imge,'sobel',1);
+imgc=imgf(2:size(imgf,1)-1,2:size(imgf,2)-1);
+imwrite(imgc,imgos);
+
+%laplace
+imge=expand(imgi,3);
+imgf=sf(imge,'laplace',1);
+imgc=imgf(2:size(imgf,1)-1,2:size(imgf,2)-1);
+imwrite(imgc,imgol);
+
+%canny
+imge=expand(imgi,3);
+imgf=sf(imge,'canny',1);
+imgc=imgf(2:size(imgf,1)-1,2:size(imgf,2)-1);
+imwrite(imgc,imgoc);
+

@@ -1,0 +1,16 @@
+%第四次作业第1题
+%空域低通滤波器：分别用高斯滤波器和中值滤波器去平滑测试图像test1和2，模板大小分别是3x3 ， 5x5 ，7x7； 分析各自优缺点；
+%-利用固定方差 sigma=1.5产生高斯滤波器. 附件有产生高斯滤波器的方法； 分析各自优缺点
+
+imgistr='test2.tif';%输入文件名
+imgostr='test2_gauss_7.tif';%输出文件名
+order=7;%模板边长
+sigma=1.5;%高斯滤波器标准差
+method='gauss';%gauss-高斯，mid-中值
+
+imgi=im2double(imread(imgistr));
+imge=expand(imgi,order);
+imgf=sf(imge,method,[order,sigma]);
+imgo=imgf(1+(order-1)/2:size(imgf,1)-(order-1)/2,1+(order-1)/2:size(imgf,2)-(order-1)/2);
+
+imwrite(imgo,imgostr);
